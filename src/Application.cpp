@@ -5,8 +5,13 @@
 #include <SFML/Window/Event.hpp>
 #include "Application.h"
 
-Application::Application() : m_window({ 1280, 720 }, "window"), m_eventHandler(m_window), m_fpsCounter(m_window)
+Application::Application() : Application(1280,720,"window")
 {
+}
+
+Application::Application(unsigned int width, unsigned int height, const std::string& title) : m_window({ width, height }, title), m_eventHandler(m_window), m_fpsCounter(m_window)
+{
+
 }
 
 void Application::run()
@@ -14,6 +19,7 @@ void Application::run()
 
 	m_eventHandler.addEventCallback(sf::Event::Closed, "closeApp", [this](sf::Event event)
 	{
+		exit();
 		m_window.close();
 	});
 
@@ -30,7 +36,6 @@ void Application::run()
 
 void Application::exit()
 {
-
 }
 
 const sf::RenderWindow& Application::getWindow() const
