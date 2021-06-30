@@ -7,6 +7,8 @@
 
 
 #include <SFML/Window/Event.hpp>
+#include <unordered_map>
+#include <functional>
 #include "EventCallback.h"
 
 namespace sf{
