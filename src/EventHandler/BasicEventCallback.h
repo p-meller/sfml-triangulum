@@ -19,6 +19,8 @@ public:
 
 	}
 
+	BasicEventCallback(const BasicEventCallback& basicEventCallback) = default;
+
 	void doAction(sf::Event event) override
 	{
 		m_callback(event);

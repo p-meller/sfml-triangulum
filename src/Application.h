@@ -15,8 +15,9 @@ class Application
 public:
 	Application();
 	Application(unsigned int width, unsigned int height, const std::string& title);
-	void run();
-	void exit();
+	virtual void init();
+	virtual void run();
+	virtual void exit();
 	const sf::RenderWindow& getWindow() const;
 
 private:

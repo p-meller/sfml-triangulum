@@ -26,6 +26,13 @@ void EventHandler::handleEvents()
 			{
 				(*actionPtr).doAction(event);
 			}
+//			for (auto&&[k, conditionalCallback] : it->second)
+//			{
+//				if(conditionalCallback.first(event))
+//				{
+//					(*(conditionalCallback.second)).doAction(event);
+//				}
+//			}
 		}
 	}
 }
@@ -47,5 +54,54 @@ void EventHandler::addEventCallback(sf::Event::EventType eventType, const std::s
 		it = eventRegister.insert({ eventType, CallbackRegisterType() }).first;
 	}
 	it->second.insert({ eventName, std::move(eventCallback) });
+}
+
+void
+EventHandler::addKeyPressesEventCallback(sf::Keyboard::Key key, const std::string& eventName,
+		const std::function<void(sf::Event)>& eventCallback)
+{
+	addEventCallback(sf::Event::KeyPressed, eventName, std::move([key, eventCallback](sf::Event event)
+	{
+		if (event.key.code == key)
+		{
+			eventCallback(event);
+		}
+	}));
+}
+
+void EventHandler::addKeyReleasedEventCallback(sf::Keyboard::Key key, const std::string& eventName,
+		const std::function<void(sf::Event)>& eventCallback)
+{
+	addEventCallback(sf::Event::KeyReleased, eventName, std::move([key, eventCallback](sf::Event event)
+	{
+		if (event.key.code == key)
+		{
+			eventCallback(event);
+		}
+	}));
+}
+
+void EventHandler::addMouseButtonPressedEventCallback(sf::Mouse::Button button, const std::string& eventName,
+		const std::function<void(sf::Event)>& eventCallback)
+{
+	addEventCallback(sf::Event::MouseButtonPressed, eventName, std::move([button, eventCallback](sf::Event event)
+	{
+		if (event.mouseButton.button == button)
+		{
+			eventCallback(event);
+		}
+	}));
+}
+
+void EventHandler::addMouseButtonReleasedEventCallback(sf::Mouse::Button button, const std::string& eventName,
+		const std::function<void(sf::Event)>& eventCallback)
+{
+	addEventCallback(sf::Event::MouseButtonReleased, eventName, std::move([button, eventCallback](sf::Event event)
+	{
+		if (event.mouseButton.button == button)
+		{
+			eventCallback(event);
+		}
+	}));
 }
 
