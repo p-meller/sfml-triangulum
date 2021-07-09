@@ -9,7 +9,8 @@ add_library(${PROJECT_NAME} STATIC
         src/EventHandler/EventHandler.cpp
         src/EventHandler/EventHandler.h
         src/EventHandler/EventCallback.h
-        src/EventHandler/BasicEventCallback.h)
+        src/EventHandler/BasicEventCallback.h
+        src/EventHandler/ConditionalEventCallback.h)
 
 
 #Set C++17

@@ -8,6 +8,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "BasicEventCallback.h"
+#include "ConditionalEventCallback.h"
 
 EventHandler::EventHandler(sf::RenderWindow& window) : m_window(window)
 {
@@ -26,13 +27,6 @@ void EventHandler::handleEvents()
 			{
 				(*actionPtr).doAction(event);
 			}
-//			for (auto&&[k, conditionalCallback] : it->second)
-//			{
-//				if(conditionalCallback.first(event))
-//				{
-//					(*(conditionalCallback.second)).doAction(event);
-//				}
-//			}
 		}
 	}
 }
@@ -56,52 +50,55 @@ void EventHandler::addEventCallback(sf::Event::EventType eventType, const std::s
 	it->second.insert({ eventName, std::move(eventCallback) });
 }
 
-void
-EventHandler::addKeyPressesEventCallback(sf::Keyboard::Key key, const std::string& eventName,
+void EventHandler::addKeyPressesEventCallback(sf::Keyboard::Key key, const std::string& eventName,
 		const std::function<void(sf::Event)>& eventCallback)
 {
-	addEventCallback(sf::Event::KeyPressed, eventName, std::move([key, eventCallback](sf::Event event)
-	{
-		if (event.key.code == key)
-		{
-			eventCallback(event);
-		}
-	}));
+	addEventCallback(sf::Event::KeyPressed, eventName, std::unique_ptr<EventCallback>(
+			std::make_unique<ConditionalEventCallback>(
+					ConditionalEventCallback(eventCallback,
+							[key](sf::Event event)
+							{
+								return event.key.code == key;
+							})
+			)));
 }
 
 void EventHandler::addKeyReleasedEventCallback(sf::Keyboard::Key key, const std::string& eventName,
 		const std::function<void(sf::Event)>& eventCallback)
 {
-	addEventCallback(sf::Event::KeyReleased, eventName, std::move([key, eventCallback](sf::Event event)
-	{
-		if (event.key.code == key)
-		{
-			eventCallback(event);
-		}
-	}));
+	addEventCallback(sf::Event::KeyReleased, eventName, std::unique_ptr<EventCallback>(
+			std::make_unique<ConditionalEventCallback>(
+					ConditionalEventCallback(eventCallback,
+							[key](sf::Event event)
+							{
+								return event.key.code == key;
+							})
+			)));
 }
 
 void EventHandler::addMouseButtonPressedEventCallback(sf::Mouse::Button button, const std::string& eventName,
 		const std::function<void(sf::Event)>& eventCallback)
 {
-	addEventCallback(sf::Event::MouseButtonPressed, eventName, std::move([button, eventCallback](sf::Event event)
-	{
-		if (event.mouseButton.button == button)
-		{
-			eventCallback(event);
-		}
-	}));
+	addEventCallback(sf::Event::MouseButtonPressed, eventName, std::unique_ptr<EventCallback>(
+			std::make_unique<ConditionalEventCallback>(
+					ConditionalEventCallback(eventCallback,
+							[button](sf::Event event)
+							{
+								return event.mouseButton.button == button;
+							})
+			)));
 }
 
 void EventHandler::addMouseButtonReleasedEventCallback(sf::Mouse::Button button, const std::string& eventName,
 		const std::function<void(sf::Event)>& eventCallback)
 {
-	addEventCallback(sf::Event::MouseButtonReleased, eventName, std::move([button, eventCallback](sf::Event event)
-	{
-		if (event.mouseButton.button == button)
-		{
-			eventCallback(event);
-		}
-	}));
+	addEventCallback(sf::Event::MouseButtonReleased, eventName, std::unique_ptr<EventCallback>(
+			std::make_unique<ConditionalEventCallback>(
+					ConditionalEventCallback(eventCallback,
+							[button](sf::Event event)
+							{
+								return event.mouseButton.button == button;
+							})
+			)));
 }
 
