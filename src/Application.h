@@ -10,6 +10,7 @@
 #include "Utils/FpsCounter.h"
 #include "EventHandler/EventHandler.h"
 
+template<class EventHandlerTemplate = EventHandler>
 class Application
 {
 public:
@@ -23,7 +24,7 @@ public:
 private:
 
 	sf::RenderWindow m_window;
-	EventHandler m_eventHandler;
+	EventHandlerTemplate m_eventHandler;
 	FpsCounter m_fpsCounter;
 };
 

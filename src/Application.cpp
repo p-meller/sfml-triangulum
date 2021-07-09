@@ -5,15 +5,18 @@
 #include <SFML/Window/Event.hpp>
 #include "Application.h"
 
-Application::Application() : Application(1280,720,"window")
+template<class EventHandlerTemplate>
+Application<EventHandlerTemplate>::Application() : Application(1280,720,"window")
 {
 }
 
-Application::Application(unsigned int width, unsigned int height, const std::string& title) : m_window({ width, height }, title), m_eventHandler(m_window), m_fpsCounter(m_window)
+template<class EventHandlerTemplate>
+Application<EventHandlerTemplate>::Application(unsigned int width, unsigned int height, const std::string& title) : m_window({ width, height }, title), m_eventHandler(m_window), m_fpsCounter(m_window)
 {
 }
 
-void Application::init()
+template<class EventHandlerTemplate>
+void Application<EventHandlerTemplate>::init()
 {
 	m_window.setFramerateLimit(240);
 
@@ -27,8 +30,8 @@ void Application::init()
 	});
 }
 
-
-void Application::run()
+template<class EventHandlerTemplate>
+void Application<EventHandlerTemplate>::run()
 {
 	init();
 
@@ -43,11 +46,17 @@ void Application::run()
 	exit();
 }
 
-void Application::exit()
+template<class EventHandlerTemplate>
+void Application<EventHandlerTemplate>::exit()
 {
 }
 
-const sf::RenderWindow& Application::getWindow() const
+template<class EventHandlerTemplate>
+const sf::RenderWindow& Application<EventHandlerTemplate>::getWindow() const
 {
 	return m_window;
 }
+
+
+template class Application<EventHandler>;
+
