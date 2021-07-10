@@ -4,7 +4,6 @@
 
 #include "EventHandler.h"
 
-#include <utility>
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "BasicEventCallback.h"
@@ -17,7 +16,7 @@ EventHandler::EventHandler(sf::RenderWindow& window) : m_window(window)
 
 void EventHandler::handleEvents()
 {
-	sf::Event event;
+	sf::Event event{};
 	while (m_window.pollEvent(event))
 	{
 		auto it = eventRegister.find(event.type);
@@ -36,6 +35,13 @@ void EventHandler::addEventCallback(sf::Event::EventType eventType, const std::s
 {
 	addEventCallback(eventType, eventName,
 			std::make_unique<BasicEventCallback>(BasicEventCallback(std::move(eventCallback))));
+}
+
+void EventHandler::addEventCallback(sf::Event::EventType eventType, const std::string& eventName,
+		std::function<void(sf::Event)> eventCallback, std::function<bool(sf::Event)> eventCondition)
+{
+	addEventCallback(eventType, eventName,
+			std::make_unique<ConditionalEventCallback>(ConditionalEventCallback(std::move(eventCallback), std::move(eventCondition))));
 }
 
 void EventHandler::addEventCallback(sf::Event::EventType eventType, const std::string& eventName,

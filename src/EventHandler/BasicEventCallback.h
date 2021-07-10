@@ -13,10 +13,10 @@
 class BasicEventCallback final : public EventCallback
 {
 	std::function<void(sf::Event)> m_callback;
+
 public:
 	explicit BasicEventCallback(std::function<void(sf::Event)> callback) : m_callback(std::move(callback))
 	{
-
 	}
 
 	void doAction(sf::Event event) override

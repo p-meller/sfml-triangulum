@@ -12,7 +12,7 @@
 class FpsCounter
 {
 public:
-	FpsCounter(sf::RenderWindow& window);
+	explicit FpsCounter(sf::RenderWindow& window);
 
 	void update();
 

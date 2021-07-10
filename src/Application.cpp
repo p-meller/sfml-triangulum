@@ -37,10 +37,10 @@ void Application<EventHandlerTemplate>::run()
 
 	while (m_window.isOpen())
 	{
-		m_fpsCounter.update();
 		m_eventHandler.handleEvents();
 		m_window.clear(sf::Color::Black);
 		m_window.display();
+		m_fpsCounter.update();
 	}
 
 	exit();
